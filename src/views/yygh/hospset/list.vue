@@ -3,26 +3,26 @@
     <!--查询表单-->
     <el-form :inline="true" class="demo-form-inline">
       <el-form-item>
-        <el-input v-model="searchObj.hosname" placeholder="医院名称"/>
+        <el-input v-model="searchObj.hosname" placeholder="医院名称" />
       </el-form-item>
 
       <el-form-item>
-        <el-input v-model="searchObj.hoscode" placeholder="医院编号"/>
+        <el-input v-model="searchObj.hoscode" placeholder="医院编号" />
       </el-form-item>
 
       <el-button type="primary" icon="el-icon-search" @click="fetchData()">查询</el-button>
       <el-button type="default" @click="resetData()">清空</el-button>
     </el-form>
     <el-table :data="list" border style="width: 100%">
-      <el-table-column prop="id" label="主键" width="180" align="center"></el-table-column>
-      <el-table-column prop="hosname" label="医院名称" width="180" align="center"></el-table-column>
-      <el-table-column prop="hoscode" label="医院编号" width="180" align="center"></el-table-column>
+      <el-table-column prop="id" label="主键" width="180" align="center" />
+      <el-table-column prop="hosname" label="医院名称" width="180" align="center" />
+      <el-table-column prop="hoscode" label="医院编号" width="180" align="center" />
       <el-table-column prop="status" label="状态" width="180" align="center">
         <template slot-scope="scope">
           {{ scope.row.status === 1 ? '可用' : '不可用' }}
         </template>
       </el-table-column>
-      <el-table-column prop="createTime" label="创建时间" align="center"></el-table-column>
+      <el-table-column prop="createTime" label="创建时间" align="center" />
       <el-table-column label="操作" align="center">
         <template slot-scope="scope">
           <router-link :to="'/yygh/hospset/edit/'+scope.row.id">
@@ -35,15 +35,14 @@
     </el-table>
     <el-pagination
       style="padding: 30px 0; text-align: center;"
-      @size-change="handleSizeChange"
-      @current-change="handleCurrentChange"
       :current-page="page"
       :page-sizes="[3, 5, 7, 9]"
       :page-size="limit"
       layout="total, sizes, prev, pager, next, jumper"
       :total="total"
-    >
-    </el-pagination>
+      @size-change="handleSizeChange"
+      @current-change="handleCurrentChange"
+    />
   </div>
 </template>
 
@@ -94,7 +93,21 @@ export default {
       // this.searchObj.hoscode = null
       this.searchObj = {}
       this.fetchData()
+    },
+    removeDataById(id) {
+      this.$confirm('确定要删除？', '提示', { confirmButtonText: '确定', cancelButtonText: '取消', type: 'warning' })
+        .then(() => {
+          return hospset.removeById(id)
+        })
+        .then(() => {
+          this.fetchData()
+          this.$message({
+            type: 'success',
+            message: '删除成功!'
+          })
+        })
     }
+
   }
 }
 </script>
