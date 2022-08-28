@@ -2,6 +2,9 @@
   <div class="app-container block">
     <!--查询表单-->
     <el-form :inline="true" class="demo-form-inline">
+      <!-- 工具条 -->
+      <el-button type="danger" size="mini" @click="removeRows()">批量删除</el-button>
+
       <el-form-item>
         <el-input v-model="searchObj.hosname" placeholder="医院名称" />
       </el-form-item>
@@ -13,7 +16,8 @@
       <el-button type="primary" icon="el-icon-search" @click="fetchData()">查询</el-button>
       <el-button type="default" @click="resetData()">清空</el-button>
     </el-form>
-    <el-table :data="list" border style="width: 100%">
+    <el-table :data="list" border style="width: 100%" stripe @selection-change="handleSelectionChange">
+      <el-table-column type="selection" width="55" />
       <el-table-column prop="id" label="主键" width="180" align="center" />
       <el-table-column prop="hosname" label="医院名称" width="180" align="center" />
       <el-table-column prop="hoscode" label="医院编号" width="180" align="center" />
@@ -58,7 +62,9 @@ export default {
       total: 0, // 总记录数
       page: 1, // 页码
       limit: 9, // 每页记录数
-      searchObj: {}// 查询条件
+      searchObj: {}, // 查询条件
+
+      multipleSelection: [] // 批量删除使用，批量选择中选择的记录列表，注意：不是每行的id
     }
   },
 
@@ -106,6 +112,39 @@ export default {
             message: '删除成功!'
           })
         })
+    },
+
+    // 当表格复选框选项发生变化的时候触发
+    handleSelectionChange(selection) {
+      this.multipleSelection = selection
+    },
+
+    // 批量删除
+    removeRows() {
+      this.$confirm('此操作将永久删除医院是设置信息, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => { // 确定执行then方法
+        var idList = []
+        // 遍历数组得到每个id值，设置到idList里面
+        for (var i = 0; i < this.multipleSelection.length; i++) {
+          var obj = this.multipleSelection[i]
+          var id = obj.id
+          idList.push(id)
+        }
+        // 调用接口
+        hospset.removeRows(idList)
+          .then(response => {
+            // 提示
+            this.$message({
+              type: 'success',
+              message: '删除成功!'
+            })
+            // 刷新页面
+            this.fetchData(1)
+          })
+      })
     }
 
   }

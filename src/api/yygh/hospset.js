@@ -41,6 +41,14 @@ export default {
       method: 'post',
       data: hostset
     })
+  },
+
+  removeRows(idList) {
+    return request({
+      url: `${api_name}/batchRemove`,
+      method: 'delete',
+      data: idList
+    })
   }
 
 }
