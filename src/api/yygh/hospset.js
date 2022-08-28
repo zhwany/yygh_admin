@@ -18,6 +18,14 @@ export default {
       url: `${api_name}/${id}`,
       method: 'delete'
     })
+  },
+
+  save(hospset) {
+    return request({
+      url: `${api_name}/saveHospSet`,
+      method: 'post',
+      data: hospset
+    })
   }
 
 }
