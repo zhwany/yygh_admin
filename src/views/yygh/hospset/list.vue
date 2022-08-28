@@ -93,7 +93,8 @@ export default {
   },
 
   methods: {
-    fetchData() { // 调用api层获取数据库中的数据
+    fetchData(page = 1) { // 调用api层获取数据库中的数据
+      this.page = page
       this.listLoading = true
 
       hospset
@@ -116,7 +117,7 @@ export default {
     // 分页，跳转到指定的第几页调用
     handleCurrentChange(val) {
       this.page = val
-      this.fetchData()
+      this.fetchData(val)
     },
 
     // 搜索条件清空
@@ -134,7 +135,11 @@ export default {
           return hospset.removeById(id)
         })
         .then(() => {
-          this.fetchData()
+          if (this.total - 1 === this.limit) {
+            this.fetchData(1)
+          } else {
+            this.fetchData(this.page)
+          }
           this.$message({
             type: 'success',
             message: '删除成功!'
@@ -180,7 +185,7 @@ export default {
       hospset.lockHospSet(id, status)
         .then(response => {
           // 刷新
-          this.fetchData()
+          this.fetchData(this.page)
         })
     }
 
