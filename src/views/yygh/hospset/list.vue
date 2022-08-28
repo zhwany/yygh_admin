@@ -36,6 +36,26 @@
           </el-button>
         </template>
       </el-table-column>
+      <el-table-column label="锁定操作" width="280" align="center">
+        <template slot-scope="scope">
+          <el-button
+            v-if="scope.row.status==1"
+            type="primary"
+            size="mini"
+            icon="el-icon-delete"
+            @click="lockHostSet(scope.row.id,0)"
+          >锁定
+          </el-button>
+          <el-button
+            v-if="scope.row.status==0"
+            type="danger"
+            size="mini"
+            icon="el-icon-delete"
+            @click="lockHostSet(scope.row.id,1)"
+          >取消锁定
+          </el-button>
+        </template>
+      </el-table-column>
     </el-table>
     <el-pagination
       style="padding: 30px 0; text-align: center;"
@@ -86,20 +106,28 @@ export default {
           this.listLoading = false
         })
     },
+
+    // 分页，每页显示的记录数改变时调用
     handleSizeChange(val) {
       this.limit = val
       this.fetchData()
     },
+
+    // 分页，跳转到指定的第几页调用
     handleCurrentChange(val) {
       this.page = val
       this.fetchData()
     },
+
+    // 搜索条件清空
     resetData() {
       // this.searchObj.hosname = null
       // this.searchObj.hoscode = null
       this.searchObj = {}
       this.fetchData()
     },
+
+    // 通过id删除
     removeDataById(id) {
       this.$confirm('确定要删除？', '提示', { confirmButtonText: '确定', cancelButtonText: '取消', type: 'warning' })
         .then(() => {
@@ -145,6 +173,15 @@ export default {
             this.fetchData(1)
           })
       })
+    },
+
+    // 锁定和取消锁定
+    lockHostSet(id, status) {
+      hospset.lockHospSet(id, status)
+        .then(response => {
+          // 刷新
+          this.fetchData()
+        })
     }
 
   }
