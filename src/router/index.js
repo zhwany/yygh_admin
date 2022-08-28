@@ -63,6 +63,13 @@ export const constantRoutes = [
         name: 'HospSetCreate',
         component: () => import('@/views/yygh/hospset/form'),
         meta: { title: '添加医院设置', icon: 'tree' }
+      },
+      {
+        path: 'edit/:id',
+        name: 'HospitalSetEdit',
+        component: () => import('@/views/yygh/hospset/form'),
+        meta: { title: '编辑', noCache: true },
+        hidden: true
       }
     ]
   },

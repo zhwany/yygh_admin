@@ -26,6 +26,21 @@ export default {
       method: 'post',
       data: hospset
     })
+  },
+
+  getById(id) {
+    return request({
+      url: `${api_name}/getHospSet/${id}`,
+      method: 'get'
+    })
+  },
+
+  updateById(hostset) {
+    return request({
+      url: `${api_name}/updateHospSet`,
+      method: 'post',
+      data: hostset
+    })
   }
 
 }

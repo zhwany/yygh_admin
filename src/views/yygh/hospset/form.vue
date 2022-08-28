@@ -34,10 +34,22 @@ export default {
     }
   },
 
+  // 注意：获取路由参数，使用的是 $route ，没有r
+  created() {
+    if (this.$route.params && this.$route.params.id) {
+      const id = this.$route.params.id
+      this.fetchDataById(id)
+    }
+  },
+
   methods: {
     saveOrUpdate() {
       this.saveBtnDisabled = true
-      this.saveData()
+      if (!this.hospset.id) {
+        this.saveData()
+      } else {
+        this.updateData()
+      }
     },
 
     // 保存
@@ -51,6 +63,30 @@ export default {
         })
         .then(response => {
           // 注意：路由跳转时 使用 $router ,有r
+          this.$router.push({
+            path: '/yygh/hospset/list'
+          })
+        })
+    },
+
+    // 用于更新医院设置时的数据回显
+    fetchDataById(id) {
+      hospset.getById(id)
+        .then(response => {
+          this.hospset = response.data.item
+        })
+    },
+
+    updateData() {
+      this.saveBtnDisabled = true
+      hospset.updateById(this.hospset)
+        .then(response => {
+          return this.$message({
+            type: 'success',
+            message: '修改成功'
+          })
+        })
+        .then(response => {
           this.$router.push({
             path: '/yygh/hospset/list'
           })
