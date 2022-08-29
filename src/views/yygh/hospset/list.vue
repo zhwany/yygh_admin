@@ -2,8 +2,6 @@
   <div class="app-container block">
     <!--查询表单-->
     <el-form :inline="true" class="demo-form-inline">
-      <!-- 工具条 -->
-      <el-button type="danger" size="mini" @click="removeRows()">批量删除</el-button>
 
       <el-form-item>
         <el-input v-model="searchObj.hosname" placeholder="医院名称" />
@@ -13,8 +11,10 @@
         <el-input v-model="searchObj.hoscode" placeholder="医院编号" />
       </el-form-item>
 
-      <el-button type="primary" icon="el-icon-search" @click="fetchData()">查询</el-button>
-      <el-button type="default" @click="resetData()">清空</el-button>
+      <el-button type="primary" icon="el-icon-search" @click="fetchData()"> 查询</el-button>
+      <el-button type="default" icon="el-icon-refresh-left" @click="resetData()"> 清空</el-button>
+      <!-- 工具条 -->
+      <el-button type="danger" icon="el-icon-delete" @click="removeRows()"> 批量删除</el-button>
     </el-form>
     <el-table :data="list" border style="width: 100%" stripe @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" />
@@ -42,7 +42,7 @@
             v-if="scope.row.status==1"
             type="primary"
             size="mini"
-            icon="el-icon-delete"
+            icon="el-icon-lock"
             @click="lockHostSet(scope.row.id,0)"
           >锁定
           </el-button>
@@ -50,7 +50,7 @@
             v-if="scope.row.status==0"
             type="danger"
             size="mini"
-            icon="el-icon-delete"
+            icon="el-icon-unlock"
             @click="lockHostSet(scope.row.id,1)"
           >取消锁定
           </el-button>
@@ -155,6 +155,16 @@ export default {
 
     // 批量删除
     removeRows() {
+      // 判断是否选中行
+      if (this.multipleSelection.length === 0) {
+        this.$message({
+          type: 'info',
+          message: '\xa0\xa0\xa0请选择要删除的数据',
+          center: 'true'
+        })
+        return
+      }
+
       this.$confirm('此操作将永久删除医院是设置信息, 是否继续?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
