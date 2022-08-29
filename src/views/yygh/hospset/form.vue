@@ -54,19 +54,24 @@ export default {
 
     // 保存
     saveData() {
-      hospset.save(this.hospset)
-        .then(response => {
-          return this.$message({
-            type: 'success',
-            message: '保存成功'
-          })
-        })
-        .then(response => {
-          // 注意：路由跳转时 使用 $router ,有r
-          this.$router.push({
-            path: '/yygh/hospset/list'
-          })
-        })
+      hospset.save(this.hospset).then(resp => {
+        if (resp.code === 20000) {
+          console.log(resp.code)
+          console.log(resp.message)
+          if (resp.message !== '') {
+            this.$message.error(resp.message)
+            this.saveBtnDisabled = false
+          } else {
+            this.$message({
+              type: 'seccess',
+              message: '保存成功'
+            })
+            this.$router.push({
+              path: '/yygh/hospset/list'
+            })
+          }
+        }
+      })
     },
 
     // 用于更新医院设置时的数据回显
