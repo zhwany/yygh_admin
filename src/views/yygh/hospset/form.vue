@@ -56,8 +56,8 @@ export default {
     saveData() {
       hospset.save(this.hospset).then(resp => {
         if (resp.code === 20000) {
-          console.log(resp.code)
-          console.log(resp.message)
+          // console.log(resp.code)
+          // console.log(resp.message)
           if (resp.message !== '') {
             this.$message.error(resp.message)
             this.saveBtnDisabled = false

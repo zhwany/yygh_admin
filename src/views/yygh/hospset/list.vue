@@ -168,6 +168,7 @@ export default {
       this.$confirm('此操作将永久删除医院是设置信息, 是否继续?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
+        cancelButtonClass: 'btn-custom-cancel',
         type: 'warning'
       }).then(() => { // 确定执行then方法
         var idList = []
