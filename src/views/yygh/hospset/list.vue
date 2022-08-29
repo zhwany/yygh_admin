@@ -101,7 +101,7 @@ export default {
         .getPageList(this.page, this.limit, this.searchObj)
         .then((response) => {
           if (response.success === true) {
-            this.list = response.data.list
+            this.list = response.data.rows
             this.total = response.data.total
           }
           this.listLoading = false
@@ -130,7 +130,8 @@ export default {
 
     // 通过id删除
     removeDataById(id) {
-      this.$confirm('确定要删除？', '提示', { confirmButtonText: '确定', cancelButtonText: '取消', type: 'warning' })
+      this.$confirm('确定要删除？', '提示', { confirmButtonText: '确定', cancelButtonText: '取消', cancelButtonClass: 'btn-custom-cancel',
+        type: 'warning' })
         .then(() => {
           return hospset.removeById(id)
         })
@@ -192,3 +193,11 @@ export default {
   }
 }
 </script>
+
+<style lang="scss">
+// 交换确认删除消息弹窗中确定和取消的位置
+.btn-custom-cancel {
+  float: right;
+  margin-left: 10px;
+}
+</style>
