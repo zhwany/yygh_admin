@@ -2,11 +2,9 @@
   <div class="app-container block">
     <!--查询表单-->
     <el-form :inline="true" class="demo-form-inline">
-
       <el-form-item>
         <el-input v-model="searchObj.hosname" placeholder="医院名称" />
       </el-form-item>
-
       <el-form-item>
         <el-input v-model="searchObj.hoscode" placeholder="医院编号" />
       </el-form-item>
@@ -16,12 +14,20 @@
       <!-- 工具条 -->
       <el-button type="danger" icon="el-icon-delete" @click="removeRows()"> 批量删除</el-button>
     </el-form>
+
+    <!-- 表格，遍历后端返回的医院设置信息集合-->
     <el-table :data="list" border style="width: 100%" stripe @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" />
-      <el-table-column prop="id" label="主键" width="180" align="center" />
+      <el-table-column prop="id" label="序号" width="100" align="center">
+        <template slot-scope="scope">
+          {{ scope.$index + 1 + (page - 1) * limit }}
+        </template>
+      </el-table-column>
       <el-table-column prop="hosname" label="医院名称" width="180" align="center" />
       <el-table-column prop="hoscode" label="医院编号" width="180" align="center" />
-      <el-table-column prop="status" label="状态" width="180" align="center">
+      <el-table-column prop="contactsName" label="联系人" width="180" align="center" />
+      <el-table-column prop="contactsPhone" label="电话" width="120" align="center" />
+      <el-table-column prop="status" label="状态" width="120" align="center">
         <template slot-scope="scope">
           {{ scope.row.status === 1 ? '可用' : '不可用' }}
         </template>
@@ -36,7 +42,7 @@
           </el-button>
         </template>
       </el-table-column>
-      <el-table-column label="锁定操作" width="280" align="center">
+      <el-table-column label="锁定操作" width="180" align="center">
         <template slot-scope="scope">
           <el-button
             v-if="scope.row.status==1"
@@ -130,8 +136,10 @@ export default {
 
     // 通过id删除
     removeDataById(id) {
-      this.$confirm('确定要删除？', '提示', { confirmButtonText: '确定', cancelButtonText: '取消', cancelButtonClass: 'btn-custom-cancel',
-        type: 'warning' })
+      this.$confirm('确定要删除？', '提示', {
+        confirmButtonText: '确定', cancelButtonText: '取消', cancelButtonClass: 'btn-custom-cancel',
+        type: 'warning'
+      })
         .then(() => {
           return hospset.removeById(id)
         })
