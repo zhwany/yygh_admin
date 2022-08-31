@@ -58,12 +58,12 @@ export default {
         if (resp.code === 20000) {
           // console.log(resp.code)
           // console.log(resp.message)
-          if (resp.message !== '') {
+          if (resp.message !== null) {
             this.$message.error(resp.message)
             this.saveBtnDisabled = false
           } else {
             this.$message({
-              type: 'seccess',
+              type: 'success',
               message: '保存成功'
             })
             this.$router.push({
