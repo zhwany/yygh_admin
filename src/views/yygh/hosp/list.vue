@@ -82,10 +82,10 @@
             <el-button type="primary" size="mini">排班</el-button>
           </router-link>
 
-          <el-button v-if="scope.row.status == 1" type="primary" size="mini" @click="updateStatus(scope.row.id, 0)">
+          <el-button v-if="scope.row.status == 1" type="danger" size="mini" @click="updateStatus(scope.row.id, 0)">
             下线
           </el-button>
-          <el-button v-if="scope.row.status == 0" type="danger" size="mini" @click="updateStatus(scope.row.id, 1)">
+          <el-button v-if="scope.row.status == 0" type="primary" size="mini" @click="updateStatus(scope.row.id, 1)">
             上线
           </el-button>
         </template>
@@ -177,6 +177,13 @@ export default {
         provinceCode: '',
         cityCode: ''
       }
+    },
+    // 更新医院的上线状态
+    updateStatus(id, status) {
+      hospApi.updateStatus(id, status)
+        .then(response => {
+          this.fetchData(this.page)
+        })
     }
   }
 }
